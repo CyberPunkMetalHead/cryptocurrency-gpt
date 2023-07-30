@@ -1,0 +1,145 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="CryptocurrencyGPT - Your Personal Cryptocurrency Assistant">
+  <div class="flex flex-col items-center justify-center my-20">
+    <div
+      id="output"
+      class="w-10/12 flex flex-col gap-2 rounded-md p-20 text-slate-50"
+    >
+    </div>
+  </div>
+  <div
+    class="fixed bottom-0 flex flex-col items-center justify-center w-full z-10 my-16"
+  >
+    <div class="flex justify-center gap-2 w-full">
+      <button
+        id="clear-button"
+        class="text-xs transition-all ease-in-out duration-150 rounded-lg py-4 px-4 bg-zinc-700 hover:bg-red-400 text-slate-50 text-sm font-semibold"
+        >Clear History</button
+      >
+      <input id="text-box" type="text" class="w-3/5 rounded-lg" />
+      <button
+        id="submit-button"
+        class="transition-all ease-in-out duration-150 rounded-lg py-4 px-12 bg-indigo-600 hover:bg-indigo-500 text-slate-50 text-sm font-semibold"
+        >Go</button
+      >
+    </div>
+  </div>
+</Layout>
+
+<script>
+  import type { ChatCompletionRequestMessage } from "openai";
+  import {
+    ChartOptions,
+    ColorType,
+    DeepPartial,
+    UTCTimestamp,
+    createChart,
+  } from "lightweight-charts";
+  import type { BinanceCustomKline } from "../types/binanceCustomKline";
+  import { time } from "console";
+  import { Util } from "../utils/utils";
+
+  const outputDiv: HTMLElement | null = document.querySelector("#output");
+
+  const submitButton: HTMLElement | null =
+    document.querySelector("#submit-button");
+  const clearButton: HTMLElement | null =
+    document.querySelector("#clear-button");
+  const input = document.querySelector("#text-box") as HTMLInputElement;
+
+  submitButton!.addEventListener("click", () => {
+    const message = input.value;
+    input.value = "";
+    getPromptFromChatGPT(message);
+  });
+
+  clearButton!.addEventListener("click", () => {
+    clearChatHistory();
+  });
+
+  //Calls our [message] endppoint which handles GPT prompts
+  const getPromptFromChatGPT = (message: string) => {
+    appendOutputToDiv(`You: ${message}`);
+
+    // Replace any question marks in the "message" with an empty
+    // string necause encoding isn't working properly.
+    const cleanedMessage = message.replace(/\?/g, "");
+
+    const encodedMessage = encodeURIComponent(cleanedMessage);
+    fetch(`http://localhost:3000/conversation/${encodedMessage}.json`)
+      .then((response) => response.json())
+      .then((data) => {
+        appendOutputToDiv(data[data.length - 1].message);
+      })
+      .catch((error) => console.error(error));
+  };
+
+  const clearChatHistory = () => {
+    fetch(`http://localhost:3000/conversation/clear.json`);
+    while (outputDiv?.firstChild) {
+      outputDiv.removeChild(outputDiv.firstChild);
+    }
+  };
+
+  const appendOutputToDiv = (data: ChatCompletionRequestMessage | string) => {
+    const newDiv = document.createElement("div");
+    if (typeof data === "string") {
+      newDiv.classList.add("responseDiv", "bg-zinc-700", "p-6", "rounded-md");
+      newDiv.innerText = data;
+    } else {
+      if (data.role === "system" && data.content) {
+        newDiv.id = "tradingviewDiv";
+        const parsedData = Util.parseKlineStringToJson(data.content);
+        createTradingviewChart(parsedData);
+      } else {
+        newDiv.classList.add("responseDiv", "bg-zinc-600", "p-6", "rounded-md");
+        newDiv.innerText = data.content ?? "";
+      }
+    }
+    outputDiv?.appendChild(newDiv);
+  };
+
+  const createTradingviewChart = (data: BinanceCustomKline[]) => {
+    const chartOptions: DeepPartial<ChartOptions> = {
+      layout: {
+        textColor: "black",
+        background: { type: ColorType.Solid, color: "white" },
+      },
+    };
+    const chart = createChart(outputDiv!, chartOptions);
+
+    const sortedData = (data ? [...data] : []).sort(
+      (a, b) =>
+        new Date(a.closeTime).getTime() - new Date(b.closeTime).getTime()
+    );
+
+    const candlestickSeries = chart.addCandlestickSeries({
+      upColor: "#26a69a",
+      downColor: "#ef5350",
+      borderVisible: false,
+      wickUpColor: "#26a69a",
+      wickDownColor: "#ef5350",
+    });
+    candlestickSeries.setData(
+      sortedData.map((x) => ({
+        time: x.closeTime as UTCTimestamp,
+        open: x.open,
+        high: x.high,
+        close: x.close,
+        low: x.low,
+      }))
+    );
+
+    chart.timeScale().fitContent();
+  };
+</script>
+
+<style>
+  .responseDiv {
+    background-color: #000000 !important;
+    color: red !important;
+  }
+</style>
