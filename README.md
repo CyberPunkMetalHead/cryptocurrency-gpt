@@ -1,6 +1,6 @@
 # CryptocurrencyGPT, all in One AI Cryptocurrency Assistant
 CryptocurrencyGPT expands on the functionality of OpenAI's LLM by using function calling in order to create a helpful cryptocurrency assitant that can perform a variety of cryptocurrency-focused tasks. It's an all in one cryptocurrency assistant that has a minimalistic user interact through which you can buy, sell or analyze cryptocurrency assets and even plot cryptocurrency charts!<br><br>
-[](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*XNXOCsdKxZl4cS1rWN5jQA.png)
+![](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*XNXOCsdKxZl4cS1rWN5jQA.png)
 ## Main CryptocurrencyGPT Functions:
 - It can return Live Market Data, as well as historical data using the Binance API
 - It can browse the internet using the Brave Search API, if it doesn't know the answer to a question
