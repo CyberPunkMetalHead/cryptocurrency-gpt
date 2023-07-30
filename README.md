@@ -1,5 +1,5 @@
 # CryptocurrencyGPT, all in One AI Cryptocurrency Assistant
-CryptocurrencyGPT expands on the functionality of OpenAI's LLM in order to create a helpful cryptocurrency assitant that can perform various cryptocurrency-focused function. It's an all in one cryptocurrency assistant that has a minimalistic user interact through which you can buy, sell or analyze cryptocurrency assets and even plot cryptocurrency charts!
+CryptocurrencyGPT expands on the functionality of OpenAI's LLM by using function calling in order to create a helpful cryptocurrency assitant that can perform a variety of cryptocurrency-focused tasks. It's an all in one cryptocurrency assistant that has a minimalistic user interact through which you can buy, sell or analyze cryptocurrency assets and even plot cryptocurrency charts!
 
 ## Main CryptocurrencyGPT Functions:
 - It can return Live Market Data, as well as historical data using the Binance API
@@ -37,3 +37,7 @@ If you want to build a release:
 | `npm run preview`      | Preview your build locally, before deploying     |
 | `npm run astro ...`    | Run CLI commands like `astro add`, `astro check` |
 | `npm run astro --help` | Get help using the Astro CLI                     |
+
+
+## Interested in Algorithmic Cryptocurrency Trading?
+If you like this project and are into crypto, I built and [algorithmic cryptocurrency trading platform](https://aesircrypto.com) alongside a small team of developers. We're always adding new features on there so go check it out if that's something you're into, or [join our Discord](https://discord.gg/jmqr7SvXVM) for crypto and tech discussions.
