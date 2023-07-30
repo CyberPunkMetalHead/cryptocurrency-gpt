@@ -8,7 +8,7 @@ CryptocurrencyGPT expands on the functionality of OpenAI's LLM by using function
 - It can plot Market Charts using the Tradingview API
 
 For a complete showcase of the features, check out my recent video on it:<br><br>
-[![Cryptocurrency GPT](https://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg)](https://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID_HERE)
+[![Cryptocurrency GPT](https://img.youtube.com/vi/tdSK1ecFfFQ/0.jpg)](https://www.youtube.com/watch?v=tdSK1ecFfFQ)
 
 
 ## Requirements:
